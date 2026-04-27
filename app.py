@@ -1,68 +1,25 @@
 import streamlit as st
-import time
 
-# --- إعدادات القائد أشرف ---
-رقم_المحفظة = "01014505254"
-اسم_المهندس = "أشرف حسن"
+st.set_page_config(page_title="YOU - Coming Soon", page_icon="🌟")
 
-st.set_page_config(page_title="YOU - بوابة الدفع الموثوقة", page_icon="🛡️")
-
-# تنسيق ملكي (أسود وأزرق) لإعطاء هيبة للموقع
 st.markdown("""
     <style>
-    #MainMenu, footer, header {visibility: hidden;}
-    .stApp { background-color: #000; color: #fff; direction: rtl; }
-    .main-container {
-        border: 1px solid #007bff;
-        padding: 30px;
-        border-radius: 15px;
-        background: #050505;
-        text-align: center;
+    .stApp { background-color: #000; color: #fff; text-align: center; direction: rtl; }
+    .loader {
+        border: 4px solid #111;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+        margin: auto;
     }
-    .step-box {
-        background: #111;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
-        border-right: 4px solid #007bff;
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
+    <div style="margin-top: 15%;">
+        <h1 style="color: #007bff; font-size: 50px;">YOU</h1>
+        <p style="font-size: 20px; color: #888;">نعمل على بناء تجربة دفع رقمية تليق بكم..</p>
+        <div class="loader"></div>
+        <p style="margin-top: 20px; color: #25d366;">قريباً جداً | بإشراف م. أشرف حسن</p>
+    </div>
     """, unsafe_allow_html=True)
-
-st.markdown('<div class="main-container">', unsafe_allow_html=True)
-st.title("🌟 منصة YOU للخدمات الرقمية")
-st.write(f"بوابة الشحن الدولي تحت إدارة م. {اسم_المهندس}")
-
-st.markdown("---")
-st.subheader("📝 نموذج تسجيل طلب شحن")
-st.info("نحن لا نبيع أوهاماً؛ أدخل طلبك وسيتم مراجعته وتنفيذه يدوياً لضمان أعلى جودة.")
-
-# نموذج الطلب الموحد
-with st.form("order_form"):
-    service_needed = st.text_input("ما هي الخدمة أو الموقع المطلوب؟ (مثلاً: ChatGPT, Netflix, أمازون...)", placeholder="🔍 اكتب طلبك هنا")
-    user_account = st.text_input("البريد الإلكتروني المراد الشحن عليه:")
-    payment_amount = st.number_input("المبلغ المراد تحويله (بالجنيه المصري):", min_value=0)
-    
-    st.markdown('<div class="step-box">', unsafe_allow_html=True)
-    st.write(f"تحويل المبلغ إلى محفظة فودافون كاش: **{رقم_المحفظة}**")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    submitted = st.form_submit_button("إرسال الطلب للمهندس أشرف 🚀")
-
-if submitted:
-    if service_needed and user_account and payment_amount > 0:
-        st.success(f"✅ تم استلام بيانات طلبك لخدمة ({service_needed}) بنجاح.")
-        st.balloons()
-        st.markdown(f"""
-        **تم حجز رقم طلب: #YOU-{int(time.time())}**
-        - سيتم مراجعة التحويل فوراً.
-        - التفعيل يتم خلال 15 لـ 30 دقيقة.
-        - سيصلك إشعار على بريدك الإلكتروني فور اكتمال الشحن.
-        """)
-    else:
-        st.error("من فضلك أكمل جميع الخانات (الخدمة، الإيميل، المبلغ) لتوثيق طلبك.")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown("---")
-st.caption(f"منصة YOU | مصداقية مهندس.. ثقة عميل | 2026")
