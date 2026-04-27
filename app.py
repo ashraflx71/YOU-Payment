@@ -5,92 +5,100 @@ import time
 رقم_المحفظة = "01014505254"
 اسم_المهندس = "أشرف حسن"
 
-st.set_page_config(page_title="YOU Payment - بوابة الشحن الشاملة", page_icon="🌍", layout="centered")
+st.set_page_config(page_title="YOU - محرك شحن الخدمات", page_icon="🔍", layout="centered")
 
-# --- التنسيق الملكي المفتوح ---
+# --- التنسيق الملكي العصري ---
 st.markdown(f"""
     <style>
     .stApp {{ background-color: #000; color: #fff; direction: rtl; }}
     html, body, [class*="css"] {{ direction: rtl; text-align: right; font-family: 'Tahoma'; }}
     
-    .status-badge {{
+    /* ستايل محرك البحث */
+    .search-container {{
         background: #111;
+        padding: 30px;
+        border-radius: 20px;
         border: 1px solid #007bff;
-        padding: 10px;
-        border-radius: 10px;
-        text-align: center;
-        margin-bottom: 20px;
-        color: #007bff;
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.1);
+        margin-bottom: 30px;
     }}
-    .payment-box {{
-        background: #0a0a0a;
-        border: 1px solid #25d366;
-        padding: 20px;
-        border-radius: 15px;
-        text-align: center;
-        margin: 20px 0;
+    
+    /* بطاقات الخدمات المشهورة (أمازون ستايل) */
+    .popular-tag {{
+        display: inline-block;
+        background: #222;
+        color: #007bff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        margin: 5px;
+        cursor: pointer;
+        border: 1px solid #333;
+        transition: 0.3s;
+    }}
+    .popular-tag:hover {{
+        background: #007bff;
+        color: white;
     }}
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🌍 منصة YOU للشحن الدولي المفتوح")
-st.markdown('<div class="status-badge">نظام دفع حر لجميع المواقع والبرامج والألعاب أونلاين</div>', unsafe_allow_html=True)
+st.title("🔍 محرك منصة YOU للخدمات")
+st.write("ابحث عن أي خدمة، موقع، أو لعبة تريد شحنها أونلاين.")
 
-# 1. اختيار الخدمة (حرية الاختيار)
-st.markdown("### 🛠️ ماذا تريد أن تشحن اليوم؟")
-category = st.radio("اختر نوع الخدمة:", ["خدمات AI جاهزة", "برامج وألعاب", "اشتراكات مواقع أخرى (طلب خاص)"])
+# --- 1. محرك البحث الذكي ---
+with st.container():
+    st.markdown('<div class="search-container">', unsafe_allow_html=True)
+    
+    # حقل البحث الرئيسي
+    search_query = st.text_input("ما الذي تريد شحنه اليوم؟", placeholder="مثال: اشتراك نتفليكس، شدات ببجي، ChatGPT...")
+    
+    # قسم "تذكير" بالخدمات المشهورة (Popular Services)
+    st.markdown("<small style='color: #888;'>خدمات شائعة حالياً:</small>", unsafe_allow_html=True)
+    
+    # قائمة الخدمات المشهورة كأزرار سريعة
+    popular_services = ["ChatGPT Plus", "Netflix", "Spotify", "PUBG Mobile", "Amazon Prime", "Adobe Creative Cloud", "Roblox"]
+    
+    # عرض الخدمات المشهورة بشكل أفقي
+    cols = st.columns(len(popular_services))
+    for i, service in enumerate(popular_services):
+        if st.button(service, key=f"btn_{i}"):
+            search_query = service # بمجرد الضغط يتم ملء محرك البحث
+            
+    st.markdown('</div>', unsafe_allow_html=True)
 
-selected_service = ""
-price = 0
+# --- 2. معالجة الطلب بناءً على البحث ---
+if search_query:
+    st.markdown(f"### 📋 تفاصيل طلب شحن: **{search_query}**")
+    
+    col_a, col_b = st.columns(2)
+    with col_a:
+        amount = st.number_input("المبلغ المراد شحنه (تقريبياً):", min_value=0)
+    with col_b:
+        email = st.text_input("البريد الإلكتروني المستهدف:")
 
-if category == "خدمات AI جاهزة":
-    options = {"ChatGPT Plus": 1200, "Claude Pro": 1150, "Midjourney": 950}
-    selected_service = st.selectbox("اختر الخدمة:", list(options.keys()))
-    price = options[selected_service]
-    st.info(f"السعر التقديري: {price} ج.م")
+    # --- 3. خطوة الدفع (تظهر فقط عند الجدية) ---
+    if amount > 0 and email:
+        st.markdown("---")
+        st.info("💡 نظام YOU: سيتم احتساب أفضل سعر صرف متاح فور تأكيد التحويل.")
+        
+        st.markdown(f"""
+        <div style="background: #0a0a0a; border: 2px solid #25d366; padding: 20px; border-radius: 15px; text-align: center;">
+            <p>لإتمام عملية البحث والشحن لـ <b>{search_query}</b></p>
+            <p>يرجى تحويل المبلغ إلى محفظة فودافون كاش:</p>
+            <h2 style="color: #25d366; letter-spacing: 2px;">{رقم_المحفظة}</h2>
+        </div>
+        """, unsafe_allow_html=True)
 
-elif category == "برامج وألعاب":
-    selected_service = st.text_input("اكتب اسم البرنامج أو اللعبة (مثال: PUBG, Netflix, Adobe):")
-    price = st.number_input("أدخل المبلغ المطلوب شحنه (بالدولار أو ما يعادله بالجنية):", min_value=1)
-    st.warning("سيتم التواصل معك فوراً لتأكيد السعر النهائي حسب سعر الصرف اللحظي.")
+        proof = st.file_uploader("📤 ارفع إيصال التحويل لتفعيل الطلب أوتوماتيكياً:", type=['png', 'jpg', 'jpeg'])
 
-else:
-    selected_service = st.text_area("اكتب اسم الموقع أو الخدمة التي تريد دفع اشتراكها:")
-    price = st.number_input("المبلغ المراد دفعه:", min_value=1)
+        if proof:
+            if st.button("🚀 تنفيذ الطلب الآن"):
+                with st.spinner('جاري معالجة الطلب في محرك البحث...'):
+                    time.sleep(2)
+                    order_id = f"YOU-SRCH-{int(time.time())}"
+                    st.success(f"✅ تم استلام طلب {search_query} بنجاح!")
+                    st.balloons()
+                    st.write(f"رقم التتبع الخاص بك: **#{order_id}**")
 
-# 2. بيانات التواصل والحساب
 st.markdown("---")
-st.markdown("### 📝 بيانات الطلب")
-email = st.text_input("البريد الإلكتروني المراد تفعيل الخدمة عليه:", placeholder="user@example.com")
-whatsapp_contact = st.text_input("رقم واتساب للمتابعة (اختياري):", placeholder="01xxxxxxxxx")
-
-if email and price > 0:
-    st.markdown("### 💳 إتمام الدفع")
-    st.markdown(f"""
-    <div class="payment-box">
-        <p>يرجى تحويل المبلغ المتفق عليه إلى رقم فودافون كاش:</p>
-        <h2 style="color: #25d366; letter-spacing: 2px;">{رقم_المحفظة}</h2>
-        <p>بعد التحويل، ارفع الإيصال بالأسفل لتفعيل "رقم الطلب"</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # 3. تأكيد التحويل بالصور
-    proof = st.file_uploader("📤 ارفع صورة إيصال التحويل هنا:", type=['png', 'jpg', 'jpeg'])
-
-    if proof:
-        if st.button("🚀 تأكيد الطلب وحجز الخدمة"):
-            with st.spinner('جاري تسجيل طلبك في النظام العالمي لمنصة YOU...'):
-                time.sleep(3)
-                order_id = f"YOU-FREE-{int(time.time())}"
-                st.success("✅ تم استلام طلبك بنجاح!")
-                st.balloons()
-                st.markdown(f"""
-                <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px solid #007bff; text-align: center;">
-                    <h4>رقم العملية: <span style="color: #007bff;">#{order_id}</span></h4>
-                    <p>الخدمة المطلوبة: <b>{selected_service}</b></p>
-                    <p>سيتم مراجعة الطلب وتنفيذه خلال دقائق. شكرًا لثقتك في منصة YOU.</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-st.markdown("---")
-st.caption(f"بوابة YOU الشاملة | تحت إدارة م. {اسم_المهندس} 2026")
+st.caption(f"محرك YOU الذكي | إدارة م. {اسم_المهندس} 2026")
