@@ -1,91 +1,115 @@
 import streamlit as st
 
-# إعدادات الصفحة
+# إعدادات الصفحة لتناسب شاشة الموبايل
 st.set_page_config(
-    page_title="YOU - بوابة الدفع الذكية",
-    page_icon="💳",
+    page_title="YOU Payment",
+    page_icon="⚡",
     layout="centered"
 )
 
-# تخصيص المظهر (CSS) ليتناسب مع ذوقك الملكي (أسود، أزرق، أبيض)
+# تخصيص التصميم المطور (Enhanced UI)
 st.markdown("""
     <style>
-    /* الخلفية العامة والتكست */
+    /* تنسيق الخلفية العامة */
     .stApp {
-        background-color: #000000;
-        color: #ffffff;
+        background-color: #050505;
+        color: #FFFFFF;
     }
-    
-    /* العناوين */
-    h1, h2, h3 {
-        color: #007bff !important;
-        font-family: 'Arial', sans-serif;
+
+    /* كارت الواجهة الرئيسي */
+    .main-card {
+        background: linear-gradient(145deg, #0a0a0a, #111111);
+        border: 1px solid #0056b3;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
         text-align: center;
+        margin-bottom: 20px;
     }
 
-    /* النصوص الكبيرة */
-    .big-font {
-        font-size: 22px !important;
-        font-weight: bold;
-        color: #ffffff;
-        text-align: right;
-        direction: rtl;
+    /* العناوين الكبيرة 22px */
+    .title-text {
+        font-size: 28px;
+        font-weight: 800;
+        color: #007bff;
+        margin-bottom: 10px;
     }
 
-    /* تخصيص الحقول والأزرار */
+    .sub-text {
+        font-size: 20px;
+        color: #b0b0b0;
+        margin-bottom: 30px;
+    }
+
+    /* تخصيص الأزرار */
     .stButton>button {
-        background-color: #007bff;
+        background: linear-gradient(90deg, #007bff, #00c6ff);
         color: white;
-        border-radius: 10px;
-        width: 100%;
-        height: 50px;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
         font-size: 18px;
+        font-weight: bold;
+        transition: 0.3s;
+        width: 100%;
     }
 
-    div[data-baseweb="input"] {
-        background-color: #1a1a1a;
-        color: white;
-        border: 1px solid #007bff;
+    .stButton>button:hover {
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* تحسين شكل الحقول */
+    input {
+        background-color: #121212 !important;
+        color: white !important;
+        border: 1px solid #333 !important;
     }
     
-    /* محاذاة العناصر لليمين (عربي) */
-    .rtl {
-        direction: rtl;
-        text-align: right;
-    }
+    /* إخفاء القائمة العلوية لـ Streamlit لمظهر أكثر احترافية */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# واجهة التطبيق
 def main():
-    st.markdown("<h1>YOU Payment Gateway</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='big-font' style='text-align:center;'>بوابتك الآمنة للمشتريات الدولية بالعملة المحلية</p>", unsafe_allow_html=True)
-    
-    st.divider()
-
-    # خيارات الخدمة
-    st.markdown("<div class='rtl'>اختر الخدمة المطلوبة:</div>", unsafe_allow_html=True)
-    option = st.selectbox("", ["شحن رصيد Google Play", "شراء من Amazon Global", "اشتراكات AI الرقمية"])
-
-    # مدخلات المستخدم
-    st.markdown("<div class='rtl'>المبلغ المطلوب (بالدولار):</div>", unsafe_allow_html=True)
-    amount_usd = st.number_input("", min_value=1.0, step=1.0)
-    
-    # حساب تقريبي (مثال)
-    exchange_rate = 50.0 # سعر الصرف الافتراضي
-    total_egp = amount_usd * exchange_rate
-
-    st.markdown(f"""
-        <div class='rtl' style='background-color: #1a1a1a; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff;'>
-            <p class='big-font'>الإجمالي بالجنيه المصري:</p>
-            <h2 style='color: #ffffff;'>{total_egp:,.2f} ج.م</h2>
+    # الهيدر
+    st.markdown("""
+        <div class="main-card">
+            <div class="title-text">YOU Payment</div>
+            <div class="sub-text">بوابتك الرقمية للخدمات العالمية</div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.write("")
+    # محتوى التطبيق
+    col1, col2 = st.columns(2)
     
-    if st.button("إتمام عملية الدفع"):
-        st.success("جاري تحويلك لبوابة الدفع المحلية...")
+    with col1:
+        st.markdown("<div style='text-align: right; font-size: 20px;'>نوع الخدمة</div>", unsafe_allow_html=True)
+        service = st.selectbox("", ["Google Play", "Amazon", "Netflix", "ChatGPT Plus"], label_visibility="collapsed")
+
+    with col2:
+        st.markdown("<div style='text-align: right; font-size: 20px;'>القيمة ($)</div>", unsafe_allow_html=True)
+        amount = st.number_input("", min_value=5, step=5, label_visibility="collapsed")
+
+    st.markdown("---")
+
+    # حساب السعر
+    rate = 50.50  # تحديث يدوي للسعر أو ربطه بـ API
+    total = amount * rate
+
+    st.markdown(f"""
+        <div style="background: rgba(0, 123, 255, 0.05); padding: 20px; border-radius: 15px; border-right: 5px solid #007bff;">
+            <p style="text-align: right; font-size: 18px; color: #888;">الإجمالي المطلوب بالجنيه</p>
+            <h1 style="text-align: right; color: #007bff; margin: 0;">{total:,.2f} EGP</h1>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.write(" ")
+    
+    if st.button("تأكيد وطلب الآن"):
+        st.balloons()
+        st.info("جاري تجهيز طلبك وتوجيهك لإنهاء الدفع...")
 
 if __name__ == "__main__":
     main()
