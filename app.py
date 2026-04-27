@@ -5,104 +5,89 @@ import time
 رقم_المحفظة = "01014505254"
 اسم_المهندس = "أشرف حسن"
 
-st.set_page_config(page_title="YOU - المحرك الذكي", page_icon="🔍", layout="centered")
+st.set_page_config(page_title="YOU - المحرك الفعال", page_icon="🔍", layout="centered")
 
-# --- كود الروح والتنسيق (إلغاء الإطارات المشتتة) ---
-st.markdown(f"""
+# 1. تهيئة ذاكرة المحرك (عشان يفضل شغال وما يمسحش البيانات)
+if 'service_query' not in st.session_state:
+    st.session_state.service_query = ""
+
+# 2. كود التصميم الملكي (إخفاء المشتتات وجعل البحث هو البطل)
+st.markdown("""
     <style>
-    .stApp {{ background-color: #000; color: #fff; direction: rtl; }}
-    html, body, [class*="css"] {{ direction: rtl; text-align: right; font-family: 'Tahoma'; }}
+    #MainMenu, footer, header {visibility: hidden;}
+    .stApp { background-color: #000; color: #fff; direction: rtl; }
     
-    /* جعل محرك البحث يبدو كقطعة واحدة احترافية وبدون إطار أزرق خارجي */
-    .stTextInput input {{
+    /* ستايل محرك البحث الاحترافي */
+    .stTextInput input {
         background-color: #111 !important;
-        color: white !important;
+        color: #25d366 !important; /* لون الخط أخضر لزيادة الروح */
         border: 2px solid #333 !important;
-        border-radius: 30px !important;
-        padding: 20px !important;
+        border-radius: 50px !important;
+        padding: 25px !important;
         font-size: 20px !important;
-        transition: 0.3s;
-    }}
-    .stTextInput input:focus {{
-        border-color: #25d366 !important; /* أخضر عند الكتابة لإعطاء روح وثقة */
-        box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
-    }}
-    
-    .hint-text {{
-        color: #888;
-        font-size: 14px;
-        margin-top: -15px;
-        margin-bottom: 20px;
-        padding-right: 15px;
-    }}
-    
-    .service-badge {{
-        display: inline-block;
-        background: #1a1a1a;
-        padding: 5px 15px;
-        border-radius: 20px;
-        border: 1px solid #333;
-        margin: 5px;
-        color: #ccc;
-        font-size: 14px;
-    }}
+    }
+    .stTextInput input:focus { border-color: #25d366 !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- واجهة "الروح" ---
-st.title("🌟 منصة YOU")
-st.write("أهلاً بك يا هندسة.. محركنا يبحث لك عن أفضل طرق الشحن الدولي.")
+st.title("🔍 محرك منصة YOU")
+st.write("اكتب الخدمة التي تريدها وسنقوم بتفعيلها لك فوراً.")
 
-# محرك البحث كـ "بطل" وحيد في الصفحة
-query = st.text_input("", placeholder="🔍 اكتب هنا ما تريد (مثلاً: اشتراك GPT، هدية، Netflix...)", label_visibility="collapsed")
+# --- 3. محرك البحث الفعال ---
+# الدالة التي تجعل الأزرار المقترحة "تكتب" داخل محرك البحث
+def set_search(name):
+    st.session_state.service_query = name
 
-if not query:
-    st.markdown('<p class="hint-text">اكتب أي خدمة وسيقوم نظامنا الآلي بتجهيز الطلب لك فوراً.</p>', unsafe_allow_html=True)
-    
-    # خدمات "تذكيرية" بدون روح الإطارات القديمة
-    st.markdown("🌐 **خدمات يطلبها الآخرون الآن:**")
-    st.markdown("""
-    <span class="service-badge">ChatGPT Plus</span>
-    <span class="service-badge">Netflix Premium</span>
-    <span class="service-badge">هدية خاصة 🎁</span>
-    <span class="service-badge">Google Drive</span>
-    """, unsafe_allow_html=True)
+# عرض المقترحات (تذكير للعميل)
+cols = st.columns(4)
+if cols[0].button("ChatGPT ⚡"): set_search("ChatGPT Plus")
+if cols[1].button("Netflix 🎬"): set_search("Netflix Premium")
+if cols[2].button("هدية 🎁"): set_search("طلب هدية خاصة")
+if cols[3].button("PUBG 🎮"): set_search("شحن شدات ببجي")
 
-# --- تنفيذ الطلب بـ "روح" تفاعلية ---
+# حقل البحث الرئيسي (مربوط بذاكرة النظام)
+query = st.text_input("ماذا تريد أن تشحن اليوم؟", 
+                     value=st.session_state.service_query, 
+                     key="main_search",
+                     placeholder="🔍 ابحث عن أي خدمة هنا...")
+
+# تحديث الذاكرة بما يكتبه العميل يدوياً
+st.session_state.service_query = query
+
+# --- 4. منطق العمل (يظهر فقط إذا كان هناك نص في البحث) ---
 if query:
-    st.markdown(f"### ⚡ جاري تجهيز طلب: `{query}`")
+    st.markdown(f"### ⚡ جاري معالجة طلب: **{query}**")
     
-    # إظهار البيانات تدريجياً لراحة العين
+    # نموذج البيانات
     with st.container():
-        email = st.text_input("📧 أدخل الإيميل الذي تود الشحن عليه:")
-        amount = st.number_input("💰 القيمة المطلوبة (بالجنيه):", min_value=0)
-
+        email = st.text_input("📧 أدخل البريد الإلكتروني المستهدف:", key="user_email")
+        amount = st.number_input("💰 القيمة المراد شحنها (بالجنيه المصري):", min_value=0, key="user_amount")
+        
         if email and amount > 0:
             st.markdown("---")
-            # تنبيه بـ "روح" المساعدة
-            st.success("✅ رائع! الخطوة الأخيرة هي إرسال قيمة الشحن لنبدأ التنفيذ.")
-            
             st.markdown(f"""
-            <div style="background: #0a0a0a; border-right: 5px solid #25d366; padding: 20px; border-radius: 10px;">
-                <p style="margin: 0;">حول <b>{amount} ج.م</b> إلى محفظة فودافون كاش:</p>
-                <h2 style="color: #25d366; margin: 10px 0;">{رقم_المحفظة}</h2>
-                <p style="font-size: 12px; color: #666;">(المهندس أشرف يتابع طلبك الآن بمجرد رفع الإيصال)</p>
+            <div style="background: #0a0a0a; border-right: 5px solid #25d366; padding: 20px; border-radius: 15px;">
+                <p>خطوة الدفع لخدمة <b>{query}</b>:</p>
+                <p>حول مبلغ <b>{amount} ج.م</b> إلى محفظة فودافون كاش:</p>
+                <h2 style="color: #25d366; text-align: center; letter-spacing: 2px;">{رقم_المحفظة}</h2>
             </div>
             """, unsafe_allow_html=True)
-
-            proof = st.file_uploader("📤 ارفع صورة التحويل هنا لربطها بطلبك:", type=['png', 'jpg', 'jpeg'])
-
+            
+            # رفع الإيصال (الربط النهائي)
+            proof = st.file_uploader("📤 ارفع صورة إيصال التحويل لتأكيد طلبك:", type=['png', 'jpg', 'jpeg'])
+            
             if proof:
-                if st.button("🚀 تنفيذ الطلب الآن"):
-                    with st.status("🛠️ جاري تسجيل الطلب وتنبيه الإدارة...", expanded=True) as status:
+                if st.button("🚀 إرسال الطلب للتنفيذ الفوري"):
+                    with st.spinner('جاري ربط طلبك بنظام المهندس أشرف...'):
                         time.sleep(2)
-                        st.write("التحقق من صحة الإيميل...")
-                        time.sleep(1)
-                        st.write("ربط الإيصال برقم الطلب...")
-                        status.update(label="✅ اكتملت العملية بنجاح!", state="complete", expanded=False)
-                    
-                    st.balloons()
-                    st.success(f"تم بنجاح! رقم طلبك هو: #YOU-{int(time.time())}")
+                        order_id = f"YOU-{int(time.time())}"
+                        st.success(f"✅ تم استلام طلبك بنجاح!")
+                        st.balloons()
+                        st.info(f"رقم الطلب الخاص بك هو: #{order_id}")
+                        st.write("سيتم تفعيل الخدمة خلال دقائق.")
+
+else:
+    st.info("💡 ابدأ بكتابة اسم الخدمة أو اختر من المقترحات أعلاه.")
 
 st.markdown("---")
-st.caption(f"منصة YOU | تحت إشراف م. {اسم_المهندس} 2026")
+st.caption(f"منصة YOU | تدار بواسطة م. {اسم_المهندس} 2026")
