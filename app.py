@@ -1,101 +1,87 @@
 import streamlit as st
-import urllib.parse
 
 # --- إعدادات القائد ---
-رقم_الواتساب = "201280208018"  # الرقم المحدث
+رقم_الواتساب = "201280208018"
 اسم_المهندس = "أشرف حسن"
 
 st.set_page_config(page_title=f"منصة YOU | {اسم_المهندس}", page_icon="🌟", layout="centered")
 
 # --- كود CSS الملكي المطور ---
-st.markdown(f"""
+st.markdown("""
     <style>
-    .stApp {{ background-color: #000000; color: #ffffff; direction: rtl; }}
-    
-    html, body, [class*="css"]  {{
-        direction: rtl; text-align: right; font-family: 'Tahoma'; font-size: 22px;
-    }}
-
-    .royal-card {{
-        background: linear-gradient(145deg, #0a0a0a, #111);
+    .stApp { background-color: #000000; color: #ffffff; direction: rtl; }
+    html, body, [class*="css"] { direction: rtl; text-align: right; font-family: 'Tahoma'; font-size: 22px; }
+    .royal-card {
+        background: #0a0a0a;
         border-right: 6px solid #007bff;
-        padding: 25px;
+        padding: 20px;
         border-radius: 15px;
-        margin-bottom: 25px;
-        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);
+        margin-bottom: 20px;
         border: 1px solid #1a1a1a;
-    }}
-
-    .stButton>button {{
+    }
+    .stButton>button {
         width: 100%;
-        background-color: transparent;
-        color: #007bff;
-        border: 2px solid #007bff;
-        border-radius: 30px;
-        padding: 15px 20px;
-        font-weight: bold;
-        font-size: 20px;
-        transition: 0.3s ease;
-        margin-top: 10px;
-    }}
-    .stButton>button:hover {{
         background-color: #007bff;
         color: white;
-        box-shadow: 0 0 25px #007bff;
-        transform: translateY(-3px);
-    }}
-
-    .whatsapp-float {{
-        position: fixed;
-        width: 65px;
-        height: 65px;
-        bottom: 30px;
-        left: 30px;
-        background-color: #25d366;
-        color: #FFF;
-        border-radius: 50px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }}
+        border-radius: 25px;
+        font-weight: bold;
+    }
     </style>
-    
-    <a href="https://wa.me/{رقم_الواتساب}" class="whatsapp-float" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="35px">
-    </a>
     """, unsafe_allow_html=True)
 
-# --- المحتوى الرئيسي ---
-st.title("🌟 منصة YOU للخدمات الرقمية")
+# --- واجهة المستخدم ---
+st.title("🌟 منصة YOU - بوابة الشحن المباشر")
 
 st.markdown(f"""
 <div class="royal-card">
     <h3>مرحباً بك يا هندسة 🛠️</h3>
-    <p>اشحن حساباتك الدولية الآن بأمان تام عبر <b>فودافون كاش</b> أو <b>إنستا باي</b> بالعملة المحلية.</p>
+    <p>اختر الخدمة، أدخل بياناتك، وسيتم تنفيذ طلبك فوراً.</p>
 </div>
 """, unsafe_allow_html=True)
 
-st.subheader("🚀 اختر الخدمة لبدء الطلب فوراً")
+# قائمة الخدمات
+services = {
+    "ChatGPT Plus ⚡": 1200, # مثال للسعر
+    "Claude.ai Pro 🧠": 1150,
+    "Midjourney 🎨": 950,
+    "خدمة مخصصة 🌐": 0
+}
 
-def send_wa(service):
-    msg = f"أهلاً بشمهندس أشرف، أريد الاستفسار عن شحن {service} عبر منصة YOU"
-    encoded_msg = urllib.parse.quote(msg)
-    return f"https://wa.me/{رقم_الواتساب}?text={encoded_msg}"
+selected_service = st.selectbox("ما هي الخدمة التي تريد شحنها؟", list(services.keys()))
 
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown(f'<a href="{send_wa("ChatGPT Plus")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>ChatGPT Plus ⚡</button></div></a>', unsafe_allow_html=True)
-    st.markdown(f'<a href="{send_wa("Claude.ai Pro")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>Claude.ai Pro 🧠</button></div></a>', unsafe_allow_html=True)
-
-with col2:
-    st.markdown(f'<a href="{send_wa("Midjourney")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>Midjourney 🎨</button></div></a>', unsafe_allow_html=True)
-    st.markdown(f'<a href="{send_wa("خدمة أخرى")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>خدمات أخرى 🌐</button></div></a>', unsafe_allow_html=True)
-
-st.info("⚡ تنفيذ سريع | دعم فني متواصل | أسعار تنافسية")
+if selected_service:
+    st.markdown("---")
+    st.subheader(f"📝 طلب شحن: {selected_service}")
+    
+    with st.form("order_form"):
+        email = st.text_input("الإيميل المراد شحنه (أو الحساب)")
+        payment_method = st.radio("اختر وسيلة الدفع:", ["فودافون كاش", "إنستا باي (InstaPay)", "أخرى"])
+        notes = st.text_area("ملاحظات إضافية")
+        
+        submit = st.form_submit_button("إتمام الطلب وإرسال التفاصيل")
+        
+        if submit:
+            if email:
+                # تجهيز رسالة احترافية تتبعت للمهندس أشرف
+                order_msg = f"طلب جديد من منصة YOU%0A" \
+                            f"----------------------%0A" \
+                            f"الخدمة: {selected_service}%0A" \
+                            f"الإيميل: {email}%0A" \
+                            f"وسيلة الدفع: {payment_method}%0A" \
+                            f"ملاحظات: {notes}"
+                
+                wa_url = f"https://wa.me/{رقم_الواتساب}?text={order_msg}"
+                
+                st.success("✅ تم تجهيز بيانات الطلب بنجاح!")
+                st.markdown(f'''
+                    <a href="{wa_url}" target="_blank" style="text-decoration: none;">
+                        <div style="background-color: #25d366; color: white; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold;">
+                            اضغط هنا لتأكيد الدفع مع المهندس أشرف عبر الواتساب
+                        </div>
+                    </a>
+                ''', unsafe_allow_html=True)
+            else:
+                st.error("من فضلك أدخل الإيميل المطلوب شحنه.")
 
 st.markdown("---")
-st.markdown(f"<div style='text-align: center; color: #888;'>م. {اسم_المهندس} | 2026 🚀</div>", unsafe_allow_html=True)
+st.caption(f"تطوير المهندس {اسم_المهندس} | 2026")
