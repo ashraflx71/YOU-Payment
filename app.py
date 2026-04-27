@@ -1,130 +1,91 @@
 import streamlit as st
-import pandas as pd
-from datetime import datetime
-import os
-import requests
 
-# 1. إعدادات الصفحة والتنسيق الملكي (22px)
-st.set_page_config(page_title="YOU Payment System", layout="centered", page_icon="💰")
+# إعدادات الصفحة
+st.set_page_config(
+    page_title="YOU - بوابة الدفع الذكية",
+    page_icon="💳",
+    layout="centered"
+)
 
-# 2. الثوابت والأمان (يتم جلبها من Secrets)
-TELEGRAM_BOT_TOKEN = st.secrets.get("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = st.secrets.get("TELEGRAM_CHAT_ID")
-ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD", "ashraf2026")
-ORDERS_FILE = 'you_orders.csv'
-
-# 3. واجهة المستخدم والتصميم الملكي (CSS)
+# تخصيص المظهر (CSS) ليتناسب مع ذوقك الملكي (أسود، أزرق، أبيض)
 st.markdown("""
     <style>
-        .stApp, [data-testid="stMainBlockContainer"] { background-color: #000000; color: #ffffff; }
-        p, li, span, label, input, .stSelectbox, .stSlider { font-size: 22px !important; }
-        h1, h2, h3 { color: #00d4ff !important; text-align: center; font-weight: bold; margin-bottom: 20px; }
-        .stMetric { background-color: #111111 !important; border: 1px solid #0056b3 !important; border-radius: 10px; padding: 15px; }
-        .stButton>button { 
-            width: 100%; 
-            background-color: #0056b3 !important; 
-            color: white !important; 
-            border-radius: 10px; 
-            height: 55px; 
-            font-size: 22px; 
-            font-weight: bold;
-            border: none;
-        }
-        .stButton>button:hover { background-color: #00d4ff !important; color: black !important; }
-        [data-testid="stSidebar"] { background-color: #050505 !important; border-right: 1px solid #111111; }
-        .stInfo { background-color: #1A1A1A; border: 1px solid #00d4ff; color: #ffffff; }
+    /* الخلفية العامة والتكست */
+    .stApp {
+        background-color: #000000;
+        color: #ffffff;
+    }
+    
+    /* العناوين */
+    h1, h2, h3 {
+        color: #007bff !important;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+
+    /* النصوص الكبيرة */
+    .big-font {
+        font-size: 22px !important;
+        font-weight: bold;
+        color: #ffffff;
+        text-align: right;
+        direction: rtl;
+    }
+
+    /* تخصيص الحقول والأزرار */
+    .stButton>button {
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px;
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    div[data-baseweb="input"] {
+        background-color: #1a1a1a;
+        color: white;
+        border: 1px solid #007bff;
+    }
+    
+    /* محاذاة العناصر لليمين (عربي) */
+    .rtl {
+        direction: rtl;
+        text-align: right;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# 4. الدوال المساعدة
-def send_telegram_notification(message):
-    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-        return
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "HTML"}
-    try:
-        requests.post(url, json=payload, timeout=5)
-    except Exception as e:
-        st.error(f"خطأ في إرسال تلجرام: {e}")
+# واجهة التطبيق
+def main():
+    st.markdown("<h1>YOU Payment Gateway</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='big-font' style='text-align:center;'>بوابتك الآمنة للمشتريات الدولية بالعملة المحلية</p>", unsafe_allow_html=True)
+    
+    st.divider()
 
-def save_transaction(service, method, sender, amount):            
-    file_path = ORDERS_FILE
-    new_data = pd.DataFrame([[datetime.now().strftime("%Y-%m-%d %H:%M"), service, method, sender, amount]], 
-                             columns=['التوقيت', 'الخدمة', 'الوسيلة', 'المرسل', 'المبلغ'])
-    if not os.path.isfile(file_path):
-        new_data.to_csv(file_path, index=False, encoding='utf-8-sig')
-    else:
-        new_data.to_csv(file_path, mode='a', header=False, index=False, encoding='utf-8-sig')
+    # خيارات الخدمة
+    st.markdown("<div class='rtl'>اختر الخدمة المطلوبة:</div>", unsafe_allow_html=True)
+    option = st.selectbox("", ["شحن رصيد Google Play", "شراء من Amazon Global", "اشتراكات AI الرقمية"])
 
-# 5. القائمة الجانبية
-with st.sidebar:
-    st.markdown("<h1 style='font-size: 40px;'>YOU</h1>", unsafe_allow_html=True)
-    st.title("القائمة الرئيسية")
-    menu = st.radio("انتقل إلى:", ["🌟 خدمات YOU", "💳 طلب خدمة دفع", "🔐 لوحة التحكم"])
-    st.markdown("---")
-    st.info("نظام YOU - اشتري عالمياً، ادفع محلياً")
-    st.caption("تطوير م. أشرف حسن © 2026")
+    # مدخلات المستخدم
+    st.markdown("<div class='rtl'>المبلغ المطلوب (بالدولار):</div>", unsafe_allow_html=True)
+    amount_usd = st.number_input("", min_value=1.0, step=1.0)
+    
+    # حساب تقريبي (مثال)
+    exchange_rate = 50.0 # سعر الصرف الافتراضي
+    total_egp = amount_usd * exchange_rate
 
-# 6. محتوى الصفحات
-if menu == "🌟 خدمات YOU":
-    st.header("🌟 منصة YOU للخدمات الرقمية")
-    st.markdown("<div style='background-color: #111111; padding: 25px; border-radius: 15px; border-left: 5px solid #00d4ff; margin-bottom: 25px;'><p style='text-align: right;'>مرحباً بك يا هندسة. نظام YOU يوفر لك أسهل طريقة لشحن الحسابات الدولية وشراء خدمات الذكاء الاصطناعي بالعملة المحلية.</p></div>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("🤖 أدوات AI")
-        st.write("• ChatGPT Plus\n• Midjourney\n• Claude.ai")
-    with col2:
-        st.subheader("🛍️ المتاجر")
-        st.write("• Amazon Global\n• Google Play\n• Apple Store")
+    st.markdown(f"""
+        <div class='rtl' style='background-color: #1a1a1a; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff;'>
+            <p class='big-font'>الإجمالي بالجنيه المصري:</p>
+            <h2 style='color: #ffffff;'>{total_egp:,.2f} ج.م</h2>
+        </div>
+    """, unsafe_allow_html=True)
 
-elif menu == "💳 طلب خدمة دفع":
-    st.header("💳 طلب شحن رصيد / خدمة")
-    with st.form("payment_form", clear_on_submit=True):
-        sender = st.text_input("رقم الموبايل (المرتبط بالمحفظة)")
-        service_type = st.selectbox("نوع الخدمة المطلوبة", ["شحن محفظة YOU", "اشتراك ChatGPT", "رصيد Google Play", "Amazon Card"])
-        amount = st.number_input("المبلغ المطلوب (بالجنيه المصري)", min_value=10.0, step=50.0)
-        payment_method = st.radio("وسيلة التحويل", ["فودافون كاش", "إنستا باي (InstaPay)"])
-        if st.form_submit_button("إرسال طلب الدفع الآن"):
-            if sender and amount > 0:
-                save_transaction(service_type, payment_method, sender, amount)
-                msg = f"<b>💰 طلب دفع جديد</b>\n\n<b>الخدمة:</b> {service_type}\n<b>المبلغ:</b> {amount} ج.م\n<b>المرسل:</b> {sender}\n<b>الوسيلة:</b> {payment_method}"
-                send_telegram_notification(msg)
-                st.success("✅ تم استلام طلبك بنجاح. جاري المراجعة والتنفيذ الآن.")
-            else:
-                st.error("❌ يرجى إدخال البيانات بشكل صحيح.")
+    st.write("")
+    
+    if st.button("إتمام عملية الدفع"):
+        st.success("جاري تحويلك لبوابة الدفع المحلية...")
 
-elif menu == "🔐 لوحة التحكم":
-    if 'authenticated' not in st.session_state:
-        st.session_state.authenticated = False
-    if not st.session_state.authenticated:
-        with st.form("admin_login"):
-            st.subheader("🔐 دخول المسؤول")
-            password = st.text_input("كلمة مرور الإدارة", type="password")
-            if st.form_submit_button("دخول"):
-                if password == ADMIN_PASSWORD:
-                    st.session_state.authenticated = True
-                    st.rerun()
-                else:
-                    st.error("❌ كلمة المرور غير صحيحة")
-    else:
-        st.title("📊 إدارة العمليات")
-        if st.button("تسجيل الخروج"):
-            st.session_state.authenticated = False
-            st.rerun()
-        if os.path.isfile(ORDERS_FILE):
-            df = pd.read_csv(ORDERS_FILE, encoding='utf-8-sig')
-            total_sum = df['المبلغ'].sum()
-            total_count = len(df)
-            c1, c2 = st.columns(2)
-            c1.metric("إجمالي الإيرادات", f"{total_sum:,.2f} ج.م")
-            c2.metric("عدد الطلبات", total_count)
-            st.markdown("---")
-            st.write("### سجل العمليات الأخير")
-            st.dataframe(df.iloc[::-1], use_container_width=True)
-            csv = df.to_csv(index=False).encode('utf-8-sig')
-            st.download_button("📥 تحميل سجل العمليات CSV", csv, "you_orders_report.csv", "text/csv")
-        else:
-            st.info("لا توجد عمليات مسجلة حالياً.")
-
-st.markdown("---")
-st.caption("نظام YOU - منصة الدفع الرقمي | الإسكندرية، مصر | تطوير م. أشرف حسن © 2026")
+if __name__ == "__main__":
+    main()
