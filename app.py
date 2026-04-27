@@ -1,90 +1,102 @@
 import streamlit as st
 
 # إعدادات الصفحة الأساسية
-st.set_page_config(page_title="YOU Payment", page_icon="🌟", layout="centered")
+st.set_page_config(page_title="YOU Payment | م. أشرف حسن", page_icon="🌟", layout="centered")
 
-# كود CSS المخصص للواجهة الملكية
+# كود CSS المخصص للواجهة الملكية العربية
 st.markdown("""
     <style>
-    /* تغيير الخلفية للأسود العميق */
+    /* توجيه الصفحة للعربية وتغيير الخلفية للأسود */
     .stApp {
         background-color: #000000;
         color: #ffffff;
+        direction: rtl;
     }
     
-    /* تنسيق النصوص العربية وحجم الخط */
+    /* تنسيق النصوص وحجم الخط الملكي */
     html, body, [class*="css"]  {
         direction: rtl;
         text-align: right;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Tahoma', Geneva, sans-serif;
         font-size: 22px;
     }
 
-    /* تصميم البطاقات الملكية */
+    /* تصميم البطاقة الملكية المضيئة */
     .royal-card {
         background: #0a0a0a;
-        border-left: 5px solid #007bff;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        border-right: 6px solid #007bff;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);
+        border: 1px solid #1a1a1a;
     }
 
-    /* تنسيق الأزرار بنمط النيون الأزرق */
+    /* أزرار النيون التفاعلية */
     .stButton>button {
         width: 100%;
         background-color: transparent;
         color: #007bff;
         border: 2px solid #007bff;
-        border-radius: 25px;
-        padding: 10px 20px;
+        border-radius: 30px;
+        padding: 12px 20px;
         font-weight: bold;
-        transition: 0.3s;
+        font-size: 20px;
+        transition: 0.4s ease-in-out;
     }
     .stButton>button:hover {
         background-color: #007bff;
         color: white;
-        box-shadow: 0 0 20px #007bff;
+        box-shadow: 0 0 25px #007bff;
+        transform: scale(1.02);
     }
 
-    /* العناوين الزرقاء */
+    /* العناوين الزرقاء الفخمة */
     h1, h2, h3 {
         color: #007bff !important;
+        font-weight: bold !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# محتوى المنصة
+# محتوى المنصة بالعربي
 st.title("🌟 منصة YOU للخدمات الرقمية")
 
+# رسالة الترحيب الشخصية
 st.markdown(f"""
 <div class="royal-card">
-    <h3>مرحباً بك يا هندسة</h3>
-    <p>نظام <b>YOU</b> يوفر لك أسهل طريقة لشحن الحسابات الدولية وشراء خدمات الذكاء الاصطناعي بالعملة المحلية.</p>
+    <h3>مرحباً بك يا هندسة 🛠️</h3>
+    <p>نظام <b>YOU</b> هو بوابتك الذكية لشحن الحسابات الدولية وشراء خدمات الذكاء الاصطناعي (AI) بالعملة المحلية بكل سهولة وأمان.</p>
 </div>
 """, unsafe_allow_html=True)
 
-st.header("🤖 أدوات الـ AI المتاحة")
+st.header("🤖 أدوات الذكاء الاصطناعي")
 
-# توزيع الخدمات في أعمدة للموبايل
+# توزيع الخدمات (مناسب جداً لعرض الموبايل)
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("ChatGPT Plus"):
-        st.info("جاري تحويلك لخدمة شحن ChatGPT...")
+    if st.button("ChatGPT Plus ⚡"):
+        st.info("جاري تجهيز طلب شحن ChatGPT Plus...")
 
 with col2:
-    if st.button("Midjourney"):
-        st.info("جاري تحويلك لخدمة شحن Midjourney...")
+    if st.button("Midjourney 🎨"):
+        st.info("جاري تحويلك لخدمات التصميم الذكي...")
 
 with col1:
-    if st.button("Claude.ai"):
-        st.info("جاري تحويلك لخدمة شحن Claude...")
+    if st.button("Claude.ai 🧠"):
+        st.info("بدء تفعيل خدمة Claude Pro...")
 
 with col2:
-    if st.button("خدمات أخرى"):
-        st.info("استكشف باقي الخدمات...")
+    if st.button("خدمات أخرى 🌐"):
+        st.info("استعرض باقي الخدمات المتاحة...")
 
-# تذييل الصفحة
+# الفوتر (التوقيع الخاص بك)
 st.markdown("---")
-st.caption("تم التطوير بواسطة م. أشرف حسن | رؤية 2026 🚀")
+st.markdown("""
+<div style='text-align: center;'>
+    <p style='font-size: 16px; color: #888;'>تم التطوير بواسطة</p>
+    <h4 style='color: #007bff; margin-top: -10px;'>المهندس أشرف حسن</h4>
+    <p style='font-size: 14px;'>رؤية تقنية مستدامة 2026 🚀</p>
+</div>
+""", unsafe_allow_html=True)
