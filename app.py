@@ -137,3 +137,28 @@ elif menu == "🔐 لوحة التحكم":
     else:
         st.title("📊 إدارة العمليات")
         if st.button("تس
+        if st.button("تسجيل الخروج"):
+            st.session_state.authenticated = False
+            st.rerun()
+        
+        if os.path.isfile(ORDERS_FILE):
+            df = pd.read_csv(ORDERS_FILE, encoding='utf-8-sig')
+            total_sum = df['المبلغ'].sum()
+            total_count = len(df)
+            
+            c1, c2 = st.columns(2)
+            c1.metric("إجمالي الإيرادات", f"{total_sum:,.2f} ج.م")
+            c2.metric("عدد الطلبات", total_count)
+            
+            st.markdown("---")
+            st.write("### سجل العمليات الأخير")
+            st.dataframe(df.iloc[::-1], use_container_width=True)
+            
+            csv = df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button("📥 تحميل سجل العمليات CSV", csv, "you_orders_report.csv", "text/csv")
+        else:
+            st.info("لا توجد عمليات مسجلة في السجل حالياً.")
+
+# تذييل الصفحة
+st.markdown("---")
+st.caption("نظام YOU - منصة الدفع الرقمي | الإسكندرية، مصر | تطوير م. أشرف حسن © 2026")
