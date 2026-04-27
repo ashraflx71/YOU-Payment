@@ -1,104 +1,80 @@
 import streamlit as st
 import time
 
-# --- إعدادات القائد أشرف ---
+# --- إعدادات القائد أشرف (المحرك السريع) ---
 رقم_المحفظة = "01014505254"
 اسم_المهندس = "أشرف حسن"
 
-st.set_page_config(page_title="YOU - محرك شحن الخدمات", page_icon="🔍", layout="centered")
+st.set_page_config(page_title="YOU - شحن فوري", page_icon="⚡", layout="centered")
 
-# --- التنسيق الملكي العصري ---
+# CSS فائق الخفة لضمان سرعة التحميل على الموبايل
 st.markdown(f"""
     <style>
     .stApp {{ background-color: #000; color: #fff; direction: rtl; }}
-    html, body, [class*="css"] {{ direction: rtl; text-align: right; font-family: 'Tahoma'; }}
-    
-    /* ستايل محرك البحث */
-    .search-container {{
+    .fast-card {{
         background: #111;
-        padding: 30px;
-        border-radius: 20px;
+        padding: 15px;
+        border-radius: 12px;
         border: 1px solid #007bff;
-        box-shadow: 0 0 20px rgba(0, 123, 255, 0.1);
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }}
-    
-    /* بطاقات الخدمات المشهورة (أمازون ستايل) */
-    .popular-tag {{
-        display: inline-block;
-        background: #222;
-        color: #007bff;
-        padding: 8px 15px;
-        border-radius: 20px;
-        margin: 5px;
-        cursor: pointer;
-        border: 1px solid #333;
-        transition: 0.3s;
-    }}
-    .popular-tag:hover {{
-        background: #007bff;
-        color: white;
+    .pay-btn {{
+        background-color: #25d366 !important;
+        color: white !important;
+        font-weight: bold;
+        width: 100%;
+        border-radius: 25px;
+        padding: 10px;
     }}
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🔍 محرك منصة YOU للخدمات")
-st.write("ابحث عن أي خدمة، موقع، أو لعبة تريد شحنها أونلاين.")
+st.title("⚡ منصة YOU: طلب فوري")
 
-# --- 1. محرك البحث الذكي ---
-with st.container():
-    st.markdown('<div class="search-container">', unsafe_allow_html=True)
-    
-    # حقل البحث الرئيسي
-    search_query = st.text_input("ما الذي تريد شحنه اليوم؟", placeholder="مثال: اشتراك نتفليكس، شدات ببجي، ChatGPT...")
-    
-    # قسم "تذكير" بالخدمات المشهورة (Popular Services)
-    st.markdown("<small style='color: #888;'>خدمات شائعة حالياً:</small>", unsafe_allow_html=True)
-    
-    # قائمة الخدمات المشهورة كأزرار سريعة
-    popular_services = ["ChatGPT Plus", "Netflix", "Spotify", "PUBG Mobile", "Amazon Prime", "Adobe Creative Cloud", "Roblox"]
-    
-    # عرض الخدمات المشهورة بشكل أفقي
-    cols = st.columns(len(popular_services))
-    for i, service in enumerate(popular_services):
-        if st.button(service, key=f"btn_{i}"):
-            search_query = service # بمجرد الضغط يتم ملء محرك البحث
-            
-    st.markdown('</div>', unsafe_allow_html=True)
+# 1. محرك البحث (الطلب السريع)
+query = st.text_input("🔍 ابحث عن خدمتك (ChatGPT, Netflix, هدايا...):", placeholder="اكتب هنا...")
 
-# --- 2. معالجة الطلب بناءً على البحث ---
-if search_query:
-    st.markdown(f"### 📋 تفاصيل طلب شحن: **{search_query}**")
+if query:
+    st.markdown(f'<div class="fast-card">📦 أنت تطلب الآن: <b>{query}</b></div>', unsafe_allow_html=True)
     
-    col_a, col_b = st.columns(2)
-    with col_a:
-        amount = st.number_input("المبلغ المراد شحنه (تقريبياً):", min_value=0)
-    with col_b:
-        email = st.text_input("البريد الإلكتروني المستهدف:")
+    col1, col2 = st.columns(2)
+    with col1:
+        email = st.text_input("📧 الإيميل المستهدف:")
+    with col2:
+        amount = st.number_input("💰 المبلغ (ج.م):", min_value=0)
 
-    # --- 3. خطوة الدفع (تظهر فقط عند الجدية) ---
-    if amount > 0 and email:
-        st.markdown("---")
-        st.info("💡 نظام YOU: سيتم احتساب أفضل سعر صرف متاح فور تأكيد التحويل.")
-        
+    if email and amount > 0:
         st.markdown(f"""
-        <div style="background: #0a0a0a; border: 2px solid #25d366; padding: 20px; border-radius: 15px; text-align: center;">
-            <p>لإتمام عملية البحث والشحن لـ <b>{search_query}</b></p>
-            <p>يرجى تحويل المبلغ إلى محفظة فودافون كاش:</p>
-            <h2 style="color: #25d366; letter-spacing: 2px;">{رقم_المحفظة}</h2>
+        <div class="fast-card" style="border-color: #25d366; text-align: center;">
+            <p>حول <b>{amount} ج.م</b> فودافون كاش إلى:</p>
+            <h2 style="color: #25d366; margin: 0;">{رقم_المحفظة}</h2>
         </div>
         """, unsafe_allow_html=True)
 
-        proof = st.file_uploader("📤 ارفع إيصال التحويل لتفعيل الطلب أوتوماتيكياً:", type=['png', 'jpg', 'jpeg'])
+        # رفع الإيصال (الخطوة الأخيرة)
+        proof = st.file_uploader("📸 ارفع إيصال التحويل (فوري):", type=['png', 'jpg', 'jpeg'])
 
         if proof:
             if st.button("🚀 تنفيذ الطلب الآن"):
-                with st.spinner('جاري معالجة الطلب في محرك البحث...'):
-                    time.sleep(2)
-                    order_id = f"YOU-SRCH-{int(time.time())}"
-                    st.success(f"✅ تم استلام طلب {search_query} بنجاح!")
+                with st.spinner('جاري التأكيد...'):
+                    # أتمتة العملية: إظهار رقم الطلب فوراً
+                    order_id = f"YOU-{int(time.time())}"
+                    st.success(f"✅ تم الاستلام! رقم طلبك: #{order_id}")
                     st.balloons()
-                    st.write(f"رقم التتبع الخاص بك: **#{order_id}**")
+                    st.info("المهندس أشرف بدأ في تنفيذ طلبك حالاً.")
+else:
+    st.markdown("""
+    <div style="text-align: center; color: #888; padding: 20px;">
+        💡 اكتب أي خدمة أو اختر من المقترحات لبدء الشحن فوراً
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # أزرار وصول سريع (لمسة واحدة)
+    st.write("🚀 وصول سريع:")
+    c1, c2, c3 = st.columns(3)
+    if c1.button("ChatGPT"): st.rerun()
+    if c2.button("Netflix"): st.rerun()
+    if c3.button("PUBG"): st.rerun()
 
 st.markdown("---")
-st.caption(f"محرك YOU الذكي | إدارة م. {اسم_المهندس} 2026")
+st.caption(f"تفعيل فوري | إدارة م. {اسم_المهندس} 2026")
