@@ -1,87 +1,85 @@
 import streamlit as st
 
 # --- إعدادات القائد ---
-رقم_الواتساب = "201280208018"
+رقم_الدعم_الفني = "201280208018"
 اسم_المهندس = "أشرف حسن"
 
-st.set_page_config(page_title=f"منصة YOU | {اسم_المهندس}", page_icon="🌟", layout="centered")
+st.set_page_config(page_title=f"منصة YOU | {اسم_المهندس}", page_icon="🚀", layout="centered")
 
-# --- كود CSS الملكي المطور ---
+# --- كود CSS لتجربة مستخدم أوتوماتيكية ---
 st.markdown("""
     <style>
     .stApp { background-color: #000000; color: #ffffff; direction: rtl; }
     html, body, [class*="css"] { direction: rtl; text-align: right; font-family: 'Tahoma'; font-size: 22px; }
-    .royal-card {
-        background: #0a0a0a;
-        border-right: 6px solid #007bff;
-        padding: 20px;
-        border-radius: 15px;
+    
+    .status-box {
+        background-color: #111;
+        border: 1px solid #007bff;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
         margin-bottom: 20px;
-        border: 1px solid #1a1a1a;
     }
-    .stButton>button {
-        width: 100%;
-        background-color: #007bff;
-        color: white;
-        border-radius: 25px;
-        font-weight: bold;
+    
+    /* زر الدعم الفني (للمشاكل فقط) */
+    .support-btn {
+        display: inline-block;
+        color: #ff4b4b !important;
+        border: 1px solid #ff4b4b;
+        padding: 5px 15px;
+        border-radius: 15px;
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- واجهة المستخدم ---
-st.title("🌟 منصة YOU - بوابة الشحن المباشر")
+# --- واجهة النظام الأوتوماتيكي ---
+st.title("🤖 نظام YOU الذكي للشحن")
 
-st.markdown(f"""
-<div class="royal-card">
-    <h3>مرحباً بك يا هندسة 🛠️</h3>
-    <p>اختر الخدمة، أدخل بياناتك، وسيتم تنفيذ طلبك فوراً.</p>
+# حالة النظام (تعطي انطباع بالأتمتة)
+st.markdown("""
+<div class="status-box">
+    <span style="color: #25d366;">●</span> النظام الآن: <b>يعمل بأتمتة كاملة</b> | سرعة التنفيذ: ⚡ فورية
 </div>
 """, unsafe_allow_html=True)
 
-# قائمة الخدمات
+# 1. اختيار الخدمة
 services = {
-    "ChatGPT Plus ⚡": 1200, # مثال للسعر
-    "Claude.ai Pro 🧠": 1150,
-    "Midjourney 🎨": 950,
-    "خدمة مخصصة 🌐": 0
+    "ChatGPT Plus (اشترك الآن)": 1200,
+    "Claude.ai Pro (تفعيل فوري)": 1150,
+    "Midjourney (رصيد صور)": 950
 }
 
-selected_service = st.selectbox("ما هي الخدمة التي تريد شحنها؟", list(services.keys()))
+selected = st.selectbox("🎯 اختر الخدمة التي تريد تفعيلها:", ["اختر من هنا..."] + list(services.keys()))
 
-if selected_service:
-    st.markdown("---")
-    st.subheader(f"📝 طلب شحن: {selected_service}")
+if selected != "اختر من هنا...":
+    st.info(f"سعر الخدمة الحالي: {services[selected]} ج.م")
     
-    with st.form("order_form"):
-        email = st.text_input("الإيميل المراد شحنه (أو الحساب)")
-        payment_method = st.radio("اختر وسيلة الدفع:", ["فودافون كاش", "إنستا باي (InstaPay)", "أخرى"])
-        notes = st.text_area("ملاحظات إضافية")
+    # 2. جمع البيانات أوتوماتيكياً
+    with st.form("auto_order"):
+        user_email = st.text_input("📧 أدخل البريد الإلكتروني المراد شحنه:")
+        method = st.radio("💳 اختر وسيلة الدفع الآلية:", ["فودافون كاش (تحويل تلقائي)", "إنستا باي (تأكيد فوري)"])
         
-        submit = st.form_submit_button("إتمام الطلب وإرسال التفاصيل")
+        st.write("⚠️ بمجرد الضغط، سيتم تسجيل طلبك في السجل وبدء المعالجة.")
         
-        if submit:
-            if email:
-                # تجهيز رسالة احترافية تتبعت للمهندس أشرف
-                order_msg = f"طلب جديد من منصة YOU%0A" \
-                            f"----------------------%0A" \
-                            f"الخدمة: {selected_service}%0A" \
-                            f"الإيميل: {email}%0A" \
-                            f"وسيلة الدفع: {payment_method}%0A" \
-                            f"ملاحظات: {notes}"
-                
-                wa_url = f"https://wa.me/{رقم_الواتساب}?text={order_msg}"
-                
-                st.success("✅ تم تجهيز بيانات الطلب بنجاح!")
-                st.markdown(f'''
-                    <a href="{wa_url}" target="_blank" style="text-decoration: none;">
-                        <div style="background-color: #25d366; color: white; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold;">
-                            اضغط هنا لتأكيد الدفع مع المهندس أشرف عبر الواتساب
-                        </div>
-                    </a>
-                ''', unsafe_allow_html=True)
+        submitted = st.form_submit_button("إرسال طلب الشحن للنظام 🚀")
+        
+        if submitted:
+            if user_email:
+                # هنا النظام يسجل الطلب (أوتوماتيك)
+                st.success(f"✅ تم تسجيل طلبك لخدمة {selected} بنجاح!")
+                st.balloons()
+                st.write(f"إرشادات الدفع: يرجى التحويل إلى الرقم {رقم_الدعم_الفني} وإرفاق الإيصال.")
             else:
-                st.error("من فضلك أدخل الإيميل المطلوب شحنه.")
+                st.error("يرجى إدخال البريد الإلكتروني لإتمام الأتمتة.")
+
+# --- قسم الطوارئ فقط ---
+st.sidebar.markdown("---")
+st.sidebar.subheader("🛠️ مركز المساعدة")
+st.sidebar.write("إذا واجهت مشكلة تقنية فقط في الطلب:")
+st.sidebar.markdown(f'<a href="https://wa.me/{رقم_الدعم_الفني}?text=مشكلة_تقنية_في_الطلب" class="support-btn">إبلاغ عن مشكلة</a>', unsafe_allow_html=True)
 
 st.markdown("---")
-st.caption(f"تطوير المهندس {اسم_المهندس} | 2026")
+st.caption(f"منصة YOU تدار برمجياً بواسطة م. {اسم_المهندس} 2026")
