@@ -1,102 +1,101 @@
 import streamlit as st
+import urllib.parse
 
-# إعدادات الصفحة الأساسية
-st.set_page_config(page_title="YOU Payment | م. أشرف حسن", page_icon="🌟", layout="centered")
+# --- إعدادات القائد ---
+رقم_الواتساب = "201280208018"  # الرقم المحدث
+اسم_المهندس = "أشرف حسن"
 
-# كود CSS المخصص للواجهة الملكية العربية
-st.markdown("""
+st.set_page_config(page_title=f"منصة YOU | {اسم_المهندس}", page_icon="🌟", layout="centered")
+
+# --- كود CSS الملكي المطور ---
+st.markdown(f"""
     <style>
-    /* توجيه الصفحة للعربية وتغيير الخلفية للأسود */
-    .stApp {
-        background-color: #000000;
-        color: #ffffff;
-        direction: rtl;
-    }
+    .stApp {{ background-color: #000000; color: #ffffff; direction: rtl; }}
     
-    /* تنسيق النصوص وحجم الخط الملكي */
-    html, body, [class*="css"]  {
-        direction: rtl;
-        text-align: right;
-        font-family: 'Tahoma', Geneva, sans-serif;
-        font-size: 22px;
-    }
+    html, body, [class*="css"]  {{
+        direction: rtl; text-align: right; font-family: 'Tahoma'; font-size: 22px;
+    }}
 
-    /* تصميم البطاقة الملكية المضيئة */
-    .royal-card {
-        background: #0a0a0a;
+    .royal-card {{
+        background: linear-gradient(145deg, #0a0a0a, #111);
         border-right: 6px solid #007bff;
         padding: 25px;
         border-radius: 15px;
         margin-bottom: 25px;
         box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);
         border: 1px solid #1a1a1a;
-    }
+    }}
 
-    /* أزرار النيون التفاعلية */
-    .stButton>button {
+    .stButton>button {{
         width: 100%;
         background-color: transparent;
         color: #007bff;
         border: 2px solid #007bff;
         border-radius: 30px;
-        padding: 12px 20px;
+        padding: 15px 20px;
         font-weight: bold;
         font-size: 20px;
-        transition: 0.4s ease-in-out;
-    }
-    .stButton>button:hover {
+        transition: 0.3s ease;
+        margin-top: 10px;
+    }}
+    .stButton>button:hover {{
         background-color: #007bff;
         color: white;
         box-shadow: 0 0 25px #007bff;
-        transform: scale(1.02);
-    }
+        transform: translateY(-3px);
+    }}
 
-    /* العناوين الزرقاء الفخمة */
-    h1, h2, h3 {
-        color: #007bff !important;
-        font-weight: bold !important;
-    }
+    .whatsapp-float {{
+        position: fixed;
+        width: 65px;
+        height: 65px;
+        bottom: 30px;
+        left: 30px;
+        background-color: #25d366;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }}
     </style>
+    
+    <a href="https://wa.me/{رقم_الواتساب}" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="35px">
+    </a>
     """, unsafe_allow_html=True)
 
-# محتوى المنصة بالعربي
+# --- المحتوى الرئيسي ---
 st.title("🌟 منصة YOU للخدمات الرقمية")
 
-# رسالة الترحيب الشخصية
 st.markdown(f"""
 <div class="royal-card">
     <h3>مرحباً بك يا هندسة 🛠️</h3>
-    <p>نظام <b>YOU</b> هو بوابتك الذكية لشحن الحسابات الدولية وشراء خدمات الذكاء الاصطناعي (AI) بالعملة المحلية بكل سهولة وأمان.</p>
+    <p>اشحن حساباتك الدولية الآن بأمان تام عبر <b>فودافون كاش</b> أو <b>إنستا باي</b> بالعملة المحلية.</p>
 </div>
 """, unsafe_allow_html=True)
 
-st.header("🤖 أدوات الذكاء الاصطناعي")
+st.subheader("🚀 اختر الخدمة لبدء الطلب فوراً")
 
-# توزيع الخدمات (مناسب جداً لعرض الموبايل)
+def send_wa(service):
+    msg = f"أهلاً بشمهندس أشرف، أريد الاستفسار عن شحن {service} عبر منصة YOU"
+    encoded_msg = urllib.parse.quote(msg)
+    return f"https://wa.me/{رقم_الواتساب}?text={encoded_msg}"
+
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("ChatGPT Plus ⚡"):
-        st.info("جاري تجهيز طلب شحن ChatGPT Plus...")
+    st.markdown(f'<a href="{send_wa("ChatGPT Plus")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>ChatGPT Plus ⚡</button></div></a>', unsafe_allow_html=True)
+    st.markdown(f'<a href="{send_wa("Claude.ai Pro")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>Claude.ai Pro 🧠</button></div></a>', unsafe_allow_html=True)
 
 with col2:
-    if st.button("Midjourney 🎨"):
-        st.info("جاري تحويلك لخدمات التصميم الذكي...")
+    st.markdown(f'<a href="{send_wa("Midjourney")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>Midjourney 🎨</button></div></a>', unsafe_allow_html=True)
+    st.markdown(f'<a href="{send_wa("خدمة أخرى")}" target="_blank" style="text-decoration:none;"><div class="stButton"><button>خدمات أخرى 🌐</button></div></a>', unsafe_allow_html=True)
 
-with col1:
-    if st.button("Claude.ai 🧠"):
-        st.info("بدء تفعيل خدمة Claude Pro...")
+st.info("⚡ تنفيذ سريع | دعم فني متواصل | أسعار تنافسية")
 
-with col2:
-    if st.button("خدمات أخرى 🌐"):
-        st.info("استعرض باقي الخدمات المتاحة...")
-
-# الفوتر (التوقيع الخاص بك)
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center;'>
-    <p style='font-size: 16px; color: #888;'>تم التطوير بواسطة</p>
-    <h4 style='color: #007bff; margin-top: -10px;'>المهندس أشرف حسن</h4>
-    <p style='font-size: 14px;'>رؤية تقنية مستدامة 2026 🚀</p>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(f"<div style='text-align: center; color: #888;'>م. {اسم_المهندس} | 2026 🚀</div>", unsafe_allow_html=True)
