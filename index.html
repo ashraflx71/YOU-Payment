@@ -3,34 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOU | بوابة الدفع</title>
+    <title>YOU Payment - المحرك الذكي</title>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; border: 1px solid #D4AF37; min-height: 90vh; }
-        h1 { color: #0000FF; margin-bottom: 5px; }
-        .input-group { margin: 30px auto; max-width: 300px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #0000FF; background: #111; color: #fff; box-sizing: border-box; text-align: center; }
-        
-        /* زر التأكيد بتأثيرات احترافية */
-        .btn-confirm { 
-            width: 100%; padding: 15px; border: none; border-radius: 8px; 
-            background: #0000FF; color: #fff; font-weight: bold; cursor: pointer;
-            transition: all 0.3s ease;
+        /* فلسفة التصميم الملكي - أخضر تقني */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            font-size: 22px; /* الحجم الذي نفضله للوضوح */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        .btn-confirm:active { background: #D4AF37; transform: scale(0.98); }
-        
-        .back-btn { display: inline-block; padding: 10px 25px; background: #333; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px; font-size: 14px; }
+
+        .main-container {
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            border: 2px solid #ccff00; /* إطار أصفر ليموني رفيع وملكي */
+            border-radius: 20px;
+            background-color: #050505;
+            box-shadow: 0 0 25px rgba(204, 255, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 45px;
+            font-weight: bold;
+            color: #ccff00;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .status-text {
+            color: #ccff00;
+            font-size: 16px;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        label {
+            display: block;
+            text-align: right;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            background-color: #111;
+            border: 1px solid #ccff00;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 18px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-width: 2px;
+            box-shadow: 0 0 10px rgba(204, 255, 0, 0.3);
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #ccff00;
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .pay-btn:hover {
+            background-color: #e6ff80;
+            transform: translateY(-2px);
+        }
+
+        /* منطقة رقم العملية */
+        #transaction-area {
+            display: none; /* مخفي في البداية */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #ccff00;
+            border-radius: 10px;
+            background-color: #111;
+        }
+
+        .tr-id {
+            color: #ccff00;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 24px;
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #555;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>YOU Payment</h1>
-    <p style="color: #D4AF37;">نظام الدفع المحلي الآمن</p>
-    
-    <div class="input-group">
-        <input type="tel" placeholder="رقم الهاتف">
-        <input type="text" placeholder="رقم العملية (TXID)">
-        <button class="btn-confirm" onclick="this.innerText='جاري المعالجة...'; this.style.background='#D4AF37';">تأكيد التحويل</button>
+
+    <div class="main-container">
+        <div class="logo">YOU</div>
+        <div class="status-text">بوابة الدفع الآمنة | المحرك التقني</div>
+        
+        <form id="paymentForm">
+            <label>رقم البطاقة</label>
+            <input type="text" placeholder="0000 0000 0000 0000" id="cardNum" required>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>تاريخ الانتهاء</label>
+                    <input type="text" placeholder="MM/YY" required>
+                </div>
+                <div style="flex: 1;">
+                    <label>رمز CVV</label>
+                    <input type="password" placeholder="***" required>
+                </div>
+            </div>
+
+            <button type="submit" class="pay-btn" id="btnText">تأكيد الدفع</button>
+        </form>
+
+        <!-- منطقة ظهور رقم العملية بعد الدفع -->
+        <div id="transaction-area">
+            <p style="font-size: 18px; margin: 0;">تمت العملية بنجاح</p>
+            <p style="font-size: 14px; color: #888;">رقم العملية (Transaction ID):</p>
+            <div class="tr-id" id="trID">#TRX-000000</div>
+        </div>
+
+        <div class="footer">
+            تم التطوير بواسطة القائد التقني & مساعده المحترف © 2026
+        </div>
     </div>
 
-    <a href="https://ashraflx71.github.io/creative2026/" class="back-btn">العودة للمنصة الرئيسية</a>
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // تغيير حالة الزر
+            const btn = document.getElementById('btnText');
+            btn.innerHTML = "جاري المعالجة...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            // توليد رقم عملية عشوائي احترافي
+            const randomID = "TRX-" + Math.floor(100000 + Math.random() * 900000);
+            
+            // محاكاة وقت المعالجة
+            setTimeout(() => {
+                document.getElementById('paymentForm').style.display = 'none';
+                document.getElementById('transaction-area').style.display = 'block';
+                document.getElementById('trID').innerHTML = randomID;
+            }, 2000);
+        });
+    </script>
 </body>
 </html>
