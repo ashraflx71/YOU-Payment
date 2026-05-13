@@ -3,27 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOU | نظام الدفع</title>
+    <title>YOU | بوابة الدفع</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; border: 1px solid #D4AF37; min-height: 90vh; }
-        h1 { color: #0000FF; }
-        .input-group { margin: 20px 0; }
-        input { width: 80%; padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #0000FF; background: #111; color: #fff; }
-        .btn { display: inline-block; padding: 12px 30px; background: #0000FF; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .back-btn { background: #D4AF37; color: #000; margin-top: 20px; }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; border: 1px solid #D4AF37; min-height: 90vh; }
+        h1 { color: #0000FF; margin-bottom: 5px; }
+        .input-group { margin: 30px auto; max-width: 300px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #0000FF; background: #111; color: #fff; box-sizing: border-box; text-align: center; }
+        
+        /* زر التأكيد بتأثيرات احترافية */
+        .btn-confirm { 
+            width: 100%; padding: 15px; border: none; border-radius: 8px; 
+            background: #0000FF; color: #fff; font-weight: bold; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-confirm:active { background: #D4AF37; transform: scale(0.98); }
+        
+        .back-btn { display: inline-block; padding: 10px 25px; background: #333; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px; font-size: 14px; }
     </style>
 </head>
 <body>
     <h1>YOU Payment</h1>
-    <p>إدارة العمليات المالية</p>
+    <p style="color: #D4AF37;">نظام الدفع المحلي الآمن</p>
     
     <div class="input-group">
-        <input type="text" placeholder="رقم الهاتف (فودافون كاش)">
-        <input type="text" placeholder="رقم العملية (Transaction ID)">
-        <br><br>
-        <button class="btn">تأكيد التحويل</button>
+        <input type="tel" placeholder="رقم الهاتف">
+        <input type="text" placeholder="رقم العملية (TXID)">
+        <button class="btn-confirm" onclick="this.innerText='جاري المعالجة...'; this.style.background='#D4AF37';">تأكيد التحويل</button>
     </div>
 
-    <a href="https://ashraflx71.github.io/creative2026/" class="btn back-btn">العودة للمنصة</a>
+    <a href="https://ashraflx71.github.io/creative2026/" class="back-btn">العودة للمنصة الرئيسية</a>
 </body>
 </html>
