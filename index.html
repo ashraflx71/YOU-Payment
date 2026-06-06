@@ -1,25 +1,28 @@
-<!-- نموذج الطلب -->
-<input type="text" id="meter" placeholder="رقم العداد">
-<input type="number" id="amount" placeholder="المبلغ">
-<button onclick="sendOrder()">سداد الفاتورة</button>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>YOU-Payment</title>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .card { width: 100%; max-width: 400px; border: 2px solid #0000FF; padding: 20px; border-radius: 15px; }
+        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card" id="app">
+        <h2>سداد فاتورة الكهرباء</h2>
+        <input type="text" id="meter" placeholder="رقم العداد">
+        <input type="number" id="amount" placeholder="المبلغ">
+        <button onclick="processPayment()">سداد</button>
+        <div id="response"></div>
+    </div>
 
-<!-- منطقة الرد التي تظهر فيها النتيجة -->
-<div id="responseArea" style="margin-top: 20px; padding: 15px; border: 1px solid #00FF00; display: none;"></div>
-
-<script>
-function sendOrder() {
-    const data = { meter: document.getElementById('meter').value, amount: document.getElementById('amount').value };
-    
-    fetch('/process', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(res => {
-        const area = document.getElementById('responseArea');
-        area.style.display = 'block';
-        area.innerHTML = `<h3>${res.status}</h3><p>${res.details}</p><p>${res.next_step}</p>`;
-    });
-}
-</script>
+    <script>
+        function processPayment() {
+            const meter = document.getElementById('meter').value;
+            document.getElementById('response').innerHTML = "<h3>تم استلام طلبك للعداد " + meter + "</h3><p>يرجى تحويل المبلغ وتأكيد العملية عبر الواتساب.</p>";
+        }
+    </script>
+</body>
+</html>
