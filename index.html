@@ -1,26 +1,25 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>YOU-Payment | خدمات ومسابقات</title>
-    <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
-        .card { width: 100%; max-width: 400px; border: 2px solid #0000FF; padding: 20px; border-radius: 15px; }
-        h2, h3 { text-align: center; }
-        input, button { width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; border-radius: 10px; background: #111; color: #fff; border: 1px solid #333; }
-        .pay-btn { background-color: #0000FF; color: #fff; }
-        .contest-btn { background-color: #00FF00; color: #000; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h2>سداد فاتورة الكهرباء</h2>
-        <input type="text" id="meter" placeholder="رقم العداد">
-        <input type="number" id="amount" placeholder="المبلغ">
-        <button class="pay-btn" onclick="alert('جاري توجيهك للسداد')">طلب سداد</button>
-        <hr>
-        <h3>🎁 مسابقة الهاتف</h3>
-        <button class="contest-btn" onclick="window.location.href='competition.html'">ادخل المسابقة</button>
-    </div>
-</body>
-</html>
+<!-- نموذج الطلب -->
+<input type="text" id="meter" placeholder="رقم العداد">
+<input type="number" id="amount" placeholder="المبلغ">
+<button onclick="sendOrder()">سداد الفاتورة</button>
+
+<!-- منطقة الرد التي تظهر فيها النتيجة -->
+<div id="responseArea" style="margin-top: 20px; padding: 15px; border: 1px solid #00FF00; display: none;"></div>
+
+<script>
+function sendOrder() {
+    const data = { meter: document.getElementById('meter').value, amount: document.getElementById('amount').value };
+    
+    fetch('/process', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(res => {
+        const area = document.getElementById('responseArea');
+        area.style.display = 'block';
+        area.innerHTML = `<h3>${res.status}</h3><p>${res.details}</p><p>${res.next_step}</p>`;
+    });
+}
+</script>
