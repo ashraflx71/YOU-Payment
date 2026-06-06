@@ -1,25 +1,31 @@
-import streamlit as st
+from flask import Flask, render_template, request, jsonify
+import csv
+from datetime import datetime
 
-st.set_page_config(page_title="YOU - Coming Soon", page_icon="🌟")
+app = Flask(__name__)
 
-st.markdown("""
-    <style>
-    .stApp { background-color: #000; color: #fff; text-align: center; direction: rtl; }
-    .loader {
-        border: 4px solid #111;
-        border-top: 4px solid #007bff;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 2s linear infinite;
-        margin: auto;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-    <div style="margin-top: 15%;">
-        <h1 style="color: #007bff; font-size: 50px;">YOU</h1>
-        <p style="font-size: 20px; color: #888;">نعمل على بناء تجربة دفع رقمية تليق بكم..</p>
-        <div class="loader"></div>
-        <p style="margin-top: 20px; color: #25d366;">قريباً جداً | بإشراف م. أشرف حسن</p>
-    </div>
-    """, unsafe_allow_html=True)
+# تسجيل الطلبات في ملف لحفظ حقوقك وأرشيفك
+def log_to_csv(data):
+    with open('payments_log.csv', 'a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), data['meter'], data['amount']])
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/process', methods=['POST'])
+def process():
+    data = request.json
+    # هنا يتم الربط المنطقي للعملية
+    log_to_csv(data)
+    
+    # الرد من الموقع نفسه
+    return jsonify({
+        "status": "تم استلام الطلب بنجاح",
+        "details": f"العداد: {data['meter']} | المبلغ: {data['amount']} ج.م",
+        "next_step": "يرجى تحويل المبلغ عبر إنستا باي/فودافون كاش وتأكيد العملية."
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True)
