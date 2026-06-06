@@ -1,43 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOU-Payment | نظام مستقل</title>
+    <title>سداد فواتير الكهرباء | YOU-Payment</title>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
-        .card { width: 100%; max-width: 400px; border: 2px solid #007bff; padding: 20px; border-radius: 15px; }
-        h2 { color: #007bff; text-align: center; }
-        select, input, button { width: 100%; padding: 15px; margin: 10px 0; font-size: 20px; border-radius: 10px; border: 1px solid #333; background: #111; color: #fff; }
-        button { background-color: #007bff; color: #fff; font-weight: bold; cursor: pointer; }
-        .note { font-size: 14px; color: #aaa; text-align: center; }
+        .card { width: 100%; max-width: 400px; border: 2px solid #0000FF; padding: 20px; border-radius: 15px; }
+        h2 { color: #0000FF; text-align: center; }
+        input, button { width: 100%; padding: 15px; margin: 10px 0; font-size: 20px; border-radius: 10px; background: #111; color: #fff; border: 1px solid #333; }
+        button { background-color: #0000FF; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>YOU-Payment</h2>
-        <select id="service">
-            <option value="vodafone">محفظة فودافون كاش</option>
-            <option value="instapay">محفظة إنستا باي</option>
-        </select>
-        <input type="number" id="amount" placeholder="المبلغ المطلوب">
-        <button onclick="requestPayment()">تأكيد الطلب</button>
-        <p class="note">سيتم توثيق طلبك يدوياً لضمان أعلى درجات الأمان.</p>
+        <h2>سداد فاتورة الكهرباء</h2>
+        <input type="text" id="meterNumber" placeholder="رقم العداد (12 رقم)">
+        <input type="number" id="amount" placeholder="قيمة الفاتورة (جنيه)">
+        <button onclick="payElectric()">طلب سداد الفاتورة</button>
     </div>
 
     <script>
-        function requestPayment() {
+        function payElectric() {
+            const meter = document.getElementById('meterNumber').value;
             const amount = document.getElementById('amount').value;
-            const service = document.getElementById('service').value;
-            if(amount > 0) {
-                const msg = `طلب دفع جديد: ${amount} جنيه عبر ${service}. اضغط موافق للإرسال إلى واتساب المطور.`;
-                if(confirm(msg)) {
-                    // رابط واتساب خاص بك لتستقبل الطلبات يدوياً
-                    window.location.href = "https://wa.me/201014505254?text=أرغب في طلب خدمة بقيمة " + amount + " جنيه عبر " + service;
-                }
+            if(meter.length >= 10 && amount > 0) {
+                const msg = `طلب سداد فاتورة كهرباء:%0Aرقم العداد: ${meter}%0Aالمبلغ: ${amount} جنيه`;
+                window.location.href = "https://wa.me/201014505254?text=" + msg;
             } else {
-                alert("يرجى إدخال مبلغ صحيح.");
+                alert("يرجى التأكد من رقم العداد والمبلغ.");
             }
         }
     </script>
