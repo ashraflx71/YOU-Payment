@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مسابقة الهاتف | YOU-Payment</title>
+    <style>
+        body { background-color: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .card { width: 100%; max-width: 400px; border: 2px solid #00FF00; padding: 20px; border-radius: 15px; }
+        h2 { color: #00FF00; text-align: center; }
+        input, button { width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; border-radius: 10px; background: #111; color: #fff; border: 1px solid #333; box-sizing: border-box; }
+        button { background-color: #00FF00; color: #000; font-weight: bold; cursor: pointer; }
+        p { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>سحب Xiaomi Redmi 13C</h2>
+        <p>أجب على السؤال وشارك بـ 10 جنيهات فقط لزيادة فرصك!</p>
+        
+        <input type="text" id="name" placeholder="اسمك الكريم">
+        <input type="text" id="phone" placeholder="رقم هاتفك (واتساب)">
+        <p>سؤال المسابقة: ما هي ميزة الـ 12GB RAM؟</p>
+        <input type="text" id="answer" placeholder="إجابتك هنا...">
+        
+        <button onclick="submitEntry()">إرسال بيانات الاشتراك</button>
+        <button style="background-color: #333; color: #fff; font-size: 14px;" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+    </div>
+
+    <script>
+        function submitEntry() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const answer = document.getElementById('answer').value;
+            
+            if(name && phone && answer) {
+                const msg = `اشتراك جديد في مسابقة الهاتف:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالإجابة: ${answer}%0A%0Aيرجى تأكيد الدفع لـ 10 جنيهات.`;
+                window.location.href = "https://wa.me/201014505254?text=" + msg;
+            } else {
+                alert("يرجى ملء جميع البيانات.");
+            }
+        }
+    </script>
+</body>
+</html>
